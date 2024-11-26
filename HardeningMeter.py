@@ -4,11 +4,11 @@ import platform
 import Linux
 
 
-def check_platform(all_files, external, show_missing, system, csv_format):
+def check_platform(all_files, external, show_missing, system, csv_format, json_format):
     """This function checks the platform and execute the hardening checks accordingly."""
     running_os = platform.system()
     if running_os == "Linux":
-        Linux.hardening_checks(all_files, external, show_missing, system, csv_format)
+        Linux.hardening_checks(all_files, external, show_missing, system, csv_format, json_format)
     else:
         print(f'We only support Linux at the moment')
 
@@ -56,6 +56,7 @@ def arguments():
     parser.add_argument('-c', '--csv_format', default=False,
                         help='Specify whether you want to save the results in a csv file; by default, the results are '
                              'output to the screen.', action='store_true')
+    parser.add_argument('-j', '--json_format', default=False, action='store_true', help='Export results to json file format')
     return parser.parse_args()
 
 
@@ -68,12 +69,13 @@ def main():
     show_missing = args.show_missing
     system = args.system
     csv_format = args.csv_format
+    json_format = args.json_format
     all_files = []
     if directory:
         all_files += get_all_files(directory)
     if file:
         all_files += file
-    check_platform(all_files, external, show_missing, system, csv_format)
+    check_platform(all_files, external, show_missing, system, csv_format, json_format)
 
 
 if __name__ == "__main__":

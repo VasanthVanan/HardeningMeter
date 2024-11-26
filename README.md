@@ -70,6 +70,8 @@ Specify if you want to scan the system hardening methods.
 
 Specify if you want to save the results to csv file (results are printed as a table to stdout by default).
 
+## -j (--json_format) 
+Specify if you want to save the results to a JSON file that's easy to parse and integrate with other tools.
 
 # Results
 HardeningMeter’s results are printed as a table and consisted of 3 different states:
