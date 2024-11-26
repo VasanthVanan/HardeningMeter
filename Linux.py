@@ -273,7 +273,7 @@ def get_elf_files(all_files):
     return elf_files
 
 
-def hardening_checks(all_files, external, show_missing, system, csv_format):
+def hardening_checks(all_files, external, show_missing, system, csv_format, json_format):
     """This function creates the hardening summary and write it according to the user's output format."""
     if all_files:
         files = get_elf_files(all_files)
@@ -314,9 +314,9 @@ def hardening_checks(all_files, external, show_missing, system, csv_format):
                         if external:
                             line += [asan]
                 lines.append(line)
-        Modules.write_results(lines, show_missing, 'Binaries', csv_format)
+        Modules.write_results(lines, show_missing, 'Binaries', csv_format, json_format)
     if system:
         smep, smap, pti = check_cpuinfo()
         lines = [['NX', 'ASLR', 'SMEP', 'SMAP', 'KASLR BASE', 'KASLR MEMORY', 'KASLR KSTACK', 'KASLR KSTACK DEFAULT',
                   'IBT', 'PTI'], [check_nx(), check_aslr(), smep, smap] + check_conf() + [pti]]
-        Modules.write_results(lines, show_missing, 'System', csv_format)
+        Modules.write_results(lines, show_missing, 'System', csv_format, json_format)

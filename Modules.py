@@ -2,6 +2,7 @@ import subprocess
 import shlex
 import csv
 import os
+import json
 from tabulate import tabulate
 
 OUTPUT = 'output'
@@ -52,12 +53,28 @@ def write_to_csv(lines, file_name):
         for line in lines:
             writer.writerow(line)
 
+def write_to_json(lines, file_name):
+    """This function writes the results to a JSON file."""
+    if not os.path.isdir(OUTPUT):
+        os.mkdir(OUTPUT)
+    path = f'{OUTPUT}/{file_name}.json'
+    
+    json_data = []
+    headers = lines[0]
+    for line in lines[1:]:
+        entry = {}
+        for i, value in enumerate(line):
+            entry[headers[i]] = value
+        json_data.append(entry)
+        
+    with open(path, 'w') as f:
+        json.dump(json_data, f, indent=4)
 
 def count_of_x(sublist):
     return sum('X' in value for value in sublist[2:])
 
 
-def write_results(lines, show_missing, file_name, csv_format):
+def write_results(lines, show_missing, file_name, csv_format, json_format):
     """This function writes the results according to the user's request."""
     if 'Binaries' in file_name and show_missing:
         header = [lines[0]]
@@ -66,6 +83,8 @@ def write_results(lines, show_missing, file_name, csv_format):
         lines = header + missing_lines
     if csv_format:
         write_to_csv(lines, file_name)
+    elif json_format:
+        write_to_json(lines, file_name)
     else:
         print(file_name)
         print(tabulate(lines, headers="firstrow"))
